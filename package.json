@@ -9,6 +9,7 @@
   "scripts": {
     "dev": "pnpm --filter web dev",
     "build": "pnpm --filter web build",
+    "vercel-build": "node scripts/vercel-build.js",
     "typecheck": "pnpm -r typecheck",
     "docs": "typedoc"
   },

@@ -1,4 +1,4 @@
 {
-  "buildCommand": "pnpm build",
-  "outputDirectory": "apps/web/dist"
+  "buildCommand": "pnpm vercel-build",
+  "outputDirectory": "dist"
 }
