@@ -1,6 +1,11 @@
 {
   "name": "nexus-media-sdk",
   "private": true,
+  "packageManager": "pnpm@10.15.1",
+  "engines": {
+    "node": ">=22.12.0",
+    "pnpm": ">=10.15.1"
+  },
   "scripts": {
     "dev": "pnpm --filter web dev",
     "build": "pnpm -r build",
