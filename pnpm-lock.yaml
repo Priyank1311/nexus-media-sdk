@@ -58,7 +58,11 @@ importers:
         specifier: ^5.0.0
         version: 5.9.3
 
-  packages/media-native: {}
+  packages/media-native:
+    devDependencies:
+      typescript:
+        specifier: ^5.0.0
+        version: 5.9.3
 
   packages/media-react:
     dependencies:
@@ -76,7 +80,11 @@ importers:
         specifier: ^5.0.0
         version: 5.9.3
 
-  packages/media-ui-native: {}
+  packages/media-ui-native:
+    devDependencies:
+      typescript:
+        specifier: ^5.0.0
+        version: 5.9.3
 
   packages/media-ui-react:
     dependencies:
