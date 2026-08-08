@@ -18,10 +18,10 @@ importers:
   apps/web:
     dependencies:
       '@media-sdk/react':
-        specifier: workspace:*
+        specifier: file:../../packages/media-react
         version: link:../../packages/media-react
       '@media-sdk/ui-react':
-        specifier: workspace:*
+        specifier: file:../../packages/media-ui-react
         version: link:../../packages/media-ui-react
       react:
         specifier: ^19.2.8
@@ -67,7 +67,7 @@ importers:
   packages/media-react:
     dependencies:
       '@media-sdk/core':
-        specifier: workspace:*
+        specifier: file:../media-core
         version: link:../media-core
       react:
         specifier: ^18.0.0 || ^19.0.0

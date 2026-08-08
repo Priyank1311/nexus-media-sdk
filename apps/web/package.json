@@ -10,8 +10,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@media-sdk/react": "workspace:*",
-    "@media-sdk/ui-react": "workspace:*",
+    "@media-sdk/react": "file:../../packages/media-react",
+    "@media-sdk/ui-react": "file:../../packages/media-ui-react",
     "react": "^19.2.8",
     "react-dom": "^19.2.8"
   },
