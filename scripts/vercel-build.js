@@ -2,8 +2,8 @@ const { execSync } = require('child_process');
 const fs = require('fs');
 const path = require('path');
 
-console.log('[Vercel Build] Building web app...');
-execSync('pnpm --filter web build', { stdio: 'inherit' });
+console.log('[Vercel Build] Building monorepo workspace...');
+execSync('pnpm -r build', { stdio: 'inherit' });
 
 const srcDist = path.join(__dirname, '../apps/web/dist');
 const destDist = path.join(__dirname, '../dist');
