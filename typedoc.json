@@ -1,0 +1,15 @@
+{
+  "$schema": "https://typedoc.org/schema.json",
+  "entryPoints": [
+    "packages/media-core/src/index.ts",
+    "packages/media-ui-react/src/index.ts"
+  ],
+  "out": "docs-site",
+  "name": "Headless Media SDK Ecosystem API Documentation",
+  "readme": "README.md",
+  "includeVersion": true,
+  "validation": {
+    "notExported": true,
+    "invalidLink": true
+  }
+}

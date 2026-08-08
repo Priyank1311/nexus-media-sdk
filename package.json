@@ -1,0 +1,14 @@
+{
+  "name": "nexus-media-sdk",
+  "private": true,
+  "scripts": {
+    "dev": "pnpm --filter web dev",
+    "build": "pnpm -r build",
+    "typecheck": "pnpm -r typecheck",
+    "docs": "typedoc"
+  },
+  "devDependencies": {
+    "typedoc": "^0.28.0",
+    "typescript": "^5.0.0"
+  }
+}

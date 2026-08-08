@@ -1,0 +1,8 @@
+[build]
+  command = "pnpm --filter web build"
+  publish = "apps/web/dist"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
