@@ -1,3 +1,12 @@
 # @media-sdk/native
 
-Not implemented — scoped out due to take-home time constraints. Contract is designed to mirror the React version; see media-react/media-ui-react for the pattern this would follow.
+Portable native-wrapper contract package for the media SDK ecosystem.
+
+This package intentionally mirrors the wrapper surface in a framework-neutral way:
+
+- media client and emitter contracts
+- media item model
+- provider and async-state shapes
+- native-friendly package entry point
+
+It does not import `media-core`, `media-react`, or `media-ui-react`.

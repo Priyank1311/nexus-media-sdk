@@ -34,8 +34,10 @@ graph TD
 
 1. **`media-core`**: Pure TypeScript. ZERO React, ZERO DOM dependencies. Encapsulates Pexels API fetching, API key closure protection, in-memory caching/request de-duplication, pub/sub event emission, and `Result<T>` error unions.
 2. **`media-react`**: Thin React wrapper. Converts `media-core` calls into React state via `<MediaProvider>` and hooks (`usePhotoSearch`, `useVideoSearch`, `useMediaItem`, `useMediaEvent`, `useMediaTracking`). Re-exports core types so consumer apps never import `media-core` directly.
-3. **`media-ui-react`**: Headless React UI library (`useGrid`, `useLightbox`, `useReelSwiper`). Ships **ZERO CSS**, **ZERO imports from `media-core`**, and **ZERO imports from `media-react`**. Operates strictly on a local, SDK-agnostic `MediaItem` interface.
-4. **`apps/web`**: The single orchestration application. It is the **ONLY** package allowed to import both `@media-sdk/react` and `@media-sdk/ui-react` to wire data to display.
+3. **`media-native`**: Native wrapper contract package. It mirrors the wrapper shape with portable TypeScript types and emitter/client contracts. It is intentionally framework-neutral in this repo.
+4. **`media-ui-react`**: Headless React UI library (`useGrid`, `useLightbox`, `useReelSwiper`). Ships **ZERO CSS**, **ZERO imports from `media-core`**, and **ZERO imports from `media-react`**. Operates strictly on a local, SDK-agnostic `MediaItem` interface.
+5. **`media-ui-native`**: Native headless UI contract package. It mirrors the prop-getter/headless shape without importing `media-core` or the web wrappers.
+6. **`apps/web`**: The single orchestration application. It is the **ONLY** package allowed to import both `@media-sdk/react` and `@media-sdk/ui-react` to wire data to display.
 
 > ⚠️ **Boundary Enforcements**:
 > - `media-react` and `media-ui-react` **NEVER** import each other.
@@ -90,9 +92,9 @@ pnpm docs
 
 ## What Was Cut and Why (Engineering Tradeoffs)
 
-1. **React Native Stubs (`media-native`, `media-ui-native`)**:
-   - *Decision*: Scaffolded `package.json` and `README.md` stubs explaining the contract.
-   - *Rationale*: Scoped out due to interview time constraints. The contract is designed to mirror `media-react` and `media-ui-react`, demonstrating monorepo multi-target architecture without duplicating implementation overhead.
+1. **React Native Contracts (`media-native`, `media-ui-native`)**:
+   - *Decision*: Implemented as portable TypeScript contract packages in this repo, not full runtime-native apps.
+   - *Rationale*: The take-home is primarily demonstrating architecture and dependency boundaries. These packages now expose the intended public shape without introducing platform-specific runtime dependencies.
 
 2. **Lightbox Video Player Custom Controls**:
    - *Decision*: The `useLightbox` hook manages full navigation and state for both photos and videos, but defers video player rendering to the consumer via `renderContent`.
@@ -118,8 +120,8 @@ pnpm docs
 ### Skill Document Verification & Testing
 
 Two SKILL.md documents were authored to guide AI coding assistants:
-- [`skills/wiring-media-data/SKILL.md`](file:///d:/My%20Projects/New%20folder/skills/wiring-media-data/SKILL.md): Teaches proper consumption of `@media-sdk/react`.
-- [`skills/using-media-components/SKILL.md`](file:///d:/My%20Projects/New%20folder/skills/using-media-components/SKILL.md): Teaches consumption of `@media-sdk/ui-react` prop-getters and BYO-styling rules.
+- [skills/wiring-media-data/SKILL.md](/D:/My%20Projects/nexus-media-sdk/skills/wiring-media-data/SKILL.md): Teaches proper consumption of `@media-sdk/react`.
+- [skills/using-media-components/SKILL.md](/D:/My%20Projects/nexus-media-sdk/skills/using-media-components/SKILL.md): Teaches consumption of `@media-sdk/ui-react` prop-getters and BYO-styling rules.
 
 **Validation Methodology (A/B Test)**:
 1. **Control Run (Without Skill)**: Prompted a fresh AI agent to build a Pexels search grid component. The agent violated boundaries by importing `@media-sdk/core` directly, instantiating `createMediaClient` inside the component, and hardcoding inline styles.
@@ -129,8 +131,8 @@ Two SKILL.md documents were authored to guide AI coding assistants:
 
 ## Project Links
 
-- **GitHub Repository**: `https://github.com/username/media-sdk-ecosystem` *(Placeholder)*
-- **Live Demo Web App**: `https://media-sdk-demo.vercel.app` *(Placeholder)*
-- **Core SDK API Docs (TypeDoc)**: `https://media-sdk-docs.vercel.app/core` *(Placeholder)*
-- **Headless UI Components Docs**: `https://media-sdk-docs.vercel.app/ui` *(Placeholder)*
-- **AI Agent Trajectory / Transcripts**: `https://github.com/username/media-sdk-ecosystem/tree/main/logs` *(Placeholder)*
+- **GitHub Repository**: `https://github.com/Priyank1311/nexus-media-sdk`
+- **Live Demo Web App**: add the deployed Vercel URL here
+- **Core SDK API Docs (TypeDoc)**: add the deployed TypeDoc URL here
+- **Headless UI Components Docs**: add the deployed UI docs URL here
+- **AI Agent Trajectory / Transcripts**: add the chat log or transcript links here
