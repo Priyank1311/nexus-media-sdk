@@ -1,4 +1,4 @@
 {
-  "buildCommand": "pnpm -r build && node -e \"require('fs').cpSync('apps/web/dist', 'dist', {recursive: true})\"",
-  "outputDirectory": "dist"
+  "buildCommand": "pnpm --filter web build",
+  "outputDirectory": "apps/web/dist"
 }
