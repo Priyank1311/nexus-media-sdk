@@ -22,5 +22,5 @@ function copyDocs() {
 }
 
 run('pnpm docs:build');
-run('pnpm build');
+run('pnpm --filter web build');
 copyDocs();
