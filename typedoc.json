@@ -2,12 +2,17 @@
   "$schema": "https://typedoc.org/schema.json",
   "entryPoints": [
     "packages/media-core/src/index.ts",
-    "packages/media-ui-react/src/index.ts"
+    "packages/media-react/src/index.ts",
+    "packages/media-native/src/index.ts",
+    "packages/media-ui-react/src/index.ts",
+    "packages/media-ui-native/src/index.ts"
   ],
   "out": "docs-site",
   "name": "Headless Media SDK Ecosystem API Documentation",
   "readme": "README.md",
   "includeVersion": true,
+  "cleanOutputDir": true,
+  "entryPointStrategy": "resolve",
   "validation": {
     "notExported": true,
     "invalidLink": true
