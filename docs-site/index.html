@@ -1,0 +1,199 @@
+<!DOCTYPE html><html class="default" lang="en" data-base="./"><head><meta charset="utf-8"/><meta http-equiv="x-ua-compatible" content="IE=edge"/><title>Headless Media SDK Ecosystem API Documentation</title><meta name="description" content="Documentation for Headless Media SDK Ecosystem API Documentation"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="assets/style.css"/><link rel="stylesheet" href="assets/highlight.css"/><script defer src="assets/main.js"></script><script async src="assets/icons.js" id="tsd-icons-script"></script><script async src="assets/search.js" id="tsd-search-script"></script><script async src="assets/navigation.js" id="tsd-nav-script"></script><script async src="assets/hierarchy.js" id="tsd-hierarchy-script"></script></head><body><script>document.documentElement.dataset.theme = localStorage.getItem("tsd-theme") || "os";document.body.style.display="none";setTimeout(() => window.app?app.showPage():document.body.style.removeProperty("display"),500)</script><header class="tsd-page-toolbar">
+<div class="tsd-toolbar-contents container"><a href="index.html" class="title">Headless Media SDK Ecosystem API Documentation</a>
+<div id="tsd-toolbar-links"></div><button id="tsd-search-trigger" class="tsd-widget" aria-label="Search"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><use href="assets/icons.svg#icon-search"></use></svg></button><dialog id="tsd-search" aria-label="Search"><input role="combobox" id="tsd-search-input" aria-controls="tsd-search-results" aria-autocomplete="list" aria-expanded="true" autocapitalize="off" autocomplete="off" placeholder="Search the docs" maxLength="100"/>
+<ul role="listbox" id="tsd-search-results"></ul>
+<div id="tsd-search-status" aria-live="polite" aria-atomic="true">
+<div>Preparing search index...</div></div></dialog><a href="#" class="tsd-widget menu" id="tsd-toolbar-menu-trigger" data-toggle="menu" aria-label="Menu"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><use href="assets/icons.svg#icon-menu"></use></svg></a></div></header>
+<div class="container container-main">
+<div class="col-content">
+<div class="tsd-page-title">
+<h1>Headless Media SDK Ecosystem API Documentation</h1></div>
+<div class="tsd-panel tsd-typography"><h1 id="nexusmedia-headless-sdk-engine" class="tsd-anchor-link">NexusMedia — Headless SDK Engine<a href="#nexusmedia-headless-sdk-engine" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h1>
+<p>A production-grade, headless media SDK ecosystem built on top of the Pexels API using a monorepo architecture (<code>pnpm</code> workspaces + TypeScript strict mode).</p>
+<hr>
+<h2 id="architecture-overview" class="tsd-anchor-link">Architecture Overview<a href="#architecture-overview" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2>
+<pre><code class="mermaid">graph TD
+    App["apps/web (Orchestration Layer)"]
+    Wrapper["packages/media-react (React State Wrapper)"]
+    UI["packages/media-ui-react (Headless UI Components)"]
+    Core["packages/media-core (Pure TypeScript Core SDK)"]
+    Pexels["Pexels REST API"]
+
+    App -->|Reads state, dispatches hooks| Wrapper
+    App -->|Maps data, renders prop-getters| UI
+    Wrapper -->|Calls SDK methods, subscribes to emitter| Core
+    Core -->|HTTP requests| Pexels
+
+    classDef coreStyle fill:#1e293b,stroke:#38bdf8,color:#fff
+    classDef wrapperStyle fill:#1e293b,stroke:#a855f7,color:#fff
+    classDef uiStyle fill:#1e293b,stroke:#22c55e,color:#fff
+    classDef appStyle fill:#1e293b,stroke:#f59e0b,color:#fff
+
+    class Core coreStyle
+    class Wrapper wrapperStyle
+    class UI uiStyle
+    class App appStyle
+</code><button type="button">Copy</button></pre>
+
+<h3 id="strict-architectural-boundaries" class="tsd-anchor-link">Strict Architectural Boundaries<a href="#strict-architectural-boundaries" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<ol>
+<li><strong><code>media-core</code></strong>: Pure TypeScript. ZERO React, ZERO DOM dependencies. Encapsulates Pexels API fetching, API key closure protection, in-memory caching/request de-duplication, pub/sub event emission, and <code>Result&lt;T&gt;</code> error unions.</li>
+<li><strong><code>media-react</code></strong>: Thin React wrapper. Converts <code>media-core</code> calls into React state via <code>&lt;MediaProvider&gt;</code> and hooks (<code>usePhotoSearch</code>, <code>useVideoSearch</code>, <code>useMediaItem</code>, <code>useMediaEvent</code>, <code>useMediaTracking</code>). Re-exports core types so consumer apps never import <code>media-core</code> directly.</li>
+<li><strong><code>media-native</code></strong>: Native wrapper contract package. It mirrors the wrapper shape with portable TypeScript types and emitter/client contracts. It is intentionally framework-neutral in this repo.</li>
+<li><strong><code>media-ui-react</code></strong>: Headless React UI library (<code>useGrid</code>, <code>useLightbox</code>, <code>useReelSwiper</code>). Ships <strong>ZERO CSS</strong>, <strong>ZERO imports from <code>media-core</code></strong>, and <strong>ZERO imports from <code>media-react</code></strong>. Operates strictly on a local, SDK-agnostic <code>MediaItem</code> interface.</li>
+<li><strong><code>media-ui-native</code></strong>: Native headless UI contract package. It mirrors the prop-getter/headless shape without importing <code>media-core</code> or the web wrappers.</li>
+<li><strong><code>apps/web</code></strong>: The single orchestration application. It is the <strong>ONLY</strong> package allowed to import both <code>@media-sdk/react</code> and <code>@media-sdk/ui-react</code> to wire data to display.</li>
+</ol>
+<blockquote>
+<p>⚠️ <strong>Boundary Enforcements</strong>:</p>
+<ul>
+<li><code>media-react</code> and <code>media-ui-react</code> <strong>NEVER</strong> import each other.</li>
+<li><code>media-ui-react</code> <strong>NEVER</strong> imports <code>media-core</code>.</li>
+<li>Application components <strong>NEVER</strong> import <code>media-core</code> directly.</li>
+</ul>
+</blockquote>
+<hr>
+<h2 id="setup-local-development" class="tsd-anchor-link">Setup &amp; Local Development<a href="#setup-local-development" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2>
+<h3 id="prerequisites" class="tsd-anchor-link">Prerequisites<a href="#prerequisites" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<ul>
+<li><strong>Node.js</strong>: <code>&gt;= 18.0.0</code></li>
+<li><strong>pnpm</strong>: <code>&gt;= 8.0.0</code></li>
+</ul>
+<h3 id="installation" class="tsd-anchor-link">Installation<a href="#installation" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<pre><code class="bash"><span class="hl-0"># Clone the repository</span><br/><span class="hl-1">git</span><span class="hl-2"> </span><span class="hl-3">clone</span><span class="hl-2"> &lt;</span><span class="hl-3">repository-ur</span><span class="hl-2">l&gt;</span><br/><span class="hl-1">cd</span><span class="hl-2"> &lt;</span><span class="hl-3">repository-folde</span><span class="hl-2">r&gt;</span><br/><br/><span class="hl-0"># Install all workspace dependencies</span><br/><span class="hl-1">pnpm</span><span class="hl-2"> </span><span class="hl-3">install</span><br/><br/><span class="hl-0"># Build all workspace packages in dependency order</span><br/><span class="hl-1">pnpm</span><span class="hl-2"> </span><span class="hl-4">-r</span><span class="hl-2"> </span><span class="hl-3">build</span>
+</code><button type="button">Copy</button></pre>
+
+<h3 id="environment-setup" class="tsd-anchor-link">Environment Setup<a href="#environment-setup" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<p>Create an <code>.env</code> file in <code>apps/web/.env</code>:</p>
+<pre><code class="env">VITE_PEXELS_API_KEY=your_pexels_api_key_here
+</code><button type="button">Copy</button></pre>
+
+<h3 id="running-packages-applications" class="tsd-anchor-link">Running Packages &amp; Applications<a href="#running-packages-applications" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<pre><code class="bash"><span class="hl-0"># Start the web app dev server (apps/web)</span><br/><span class="hl-1">pnpm</span><span class="hl-2"> </span><span class="hl-3">dev</span><br/><br/><span class="hl-0"># Typecheck all workspace packages</span><br/><span class="hl-1">pnpm</span><span class="hl-2"> </span><span class="hl-3">typecheck</span><br/><br/><span class="hl-0"># Build static API documentation site via TypeDoc</span><br/><span class="hl-1">pnpm</span><span class="hl-2"> </span><span class="hl-3">docs</span>
+</code><button type="button">Copy</button></pre>
+
+<hr>
+<h2 id="what-was-cut-and-why-engineering-tradeoffs" class="tsd-anchor-link">What Was Cut and Why (Engineering Tradeoffs)<a href="#what-was-cut-and-why-engineering-tradeoffs" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2>
+<ol>
+<li>
+<p><strong>React Native Contracts (<code>media-native</code>, <code>media-ui-native</code>)</strong>:</p>
+<ul>
+<li><em>Decision</em>: Implemented as portable TypeScript contract packages in this repo, not full runtime-native apps.</li>
+<li><em>Rationale</em>: The take-home is primarily demonstrating architecture and dependency boundaries. These packages now expose the intended public shape without introducing platform-specific runtime dependencies.</li>
+</ul>
+</li>
+<li>
+<p><strong>Lightbox Video Player Custom Controls</strong>:</p>
+<ul>
+<li><em>Decision</em>: The <code>useLightbox</code> hook manages full navigation and state for both photos and videos, but defers video player rendering to the consumer via <code>renderContent</code>.</li>
+<li><em>Rationale</em>: Custom video playback controls (custom scrubbers, volume sliders, HLS streaming) introduce heavy UI opinion. Deferring video rendering to the consumer preserves the strict &quot;zero shipped CSS / headless&quot; contract while keeping the Lightbox focused on accessibility, focus trapping, and keyboard navigation.</li>
+</ul>
+</li>
+<li>
+<p><strong>Lazy Cache Eviction vs. Background Timers in <code>media-core</code></strong>:</p>
+<ul>
+<li><em>Decision</em>: Cache TTL (5 minutes) uses lazy check-on-read eviction instead of <code>setInterval</code> timers.</li>
+<li><em>Rationale</em>: Active background interval timers in JS libraries create memory leak risks in short-lived environments (CLI scripts, SSR request handlers, unit tests). Lazy eviction is deterministic, side-effect free, and zero-overhead.</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h2 id="ai-tool-usage" class="tsd-anchor-link">AI Tool Usage<a href="#ai-tool-usage" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2>
+<h3 id="generation-vs-review-breakdown" class="tsd-anchor-link">Generation vs. Review Breakdown<a href="#generation-vs-review-breakdown" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<table>
+<thead>
+<tr>
+<th>Package</th>
+<th>Primary AI Tools</th>
+<th>AI-Generated Scope</th>
+<th>Hand-Edited / Architected Scope</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>media-core</code></td>
+<td>Gemini 3.1 Pro / Claude 3.6</td>
+<td>Initial Pexels API type definitions, basic error factory functions.</td>
+<td>Refactored API key closure protection, pub/sub emitter error isolation, lazy cache key sorting, discriminated union <code>Result&lt;T&gt;</code> design.</td>
+</tr>
+<tr>
+<td><code>media-react</code></td>
+<td>Gemini 3.6 Flash / Claude 3.6</td>
+<td>Hook scaffolding and JSDoc comment blocks.</td>
+<td>Designed <code>useAsyncState</code> generic mapper, refactored <code>usePhotoSearch</code>/<code>useVideoSearch</code> pagination refs, handler ref pattern in <code>useMediaEvent</code>.</td>
+</tr>
+<tr>
+<td><code>media-ui-react</code></td>
+<td>Gemini 3.6 Flash / Claude 3.6</td>
+<td>Basic HTML attribute types and boilerplate JSX components.</td>
+<td>Architected prop-getter merging utility (<code>mergeProps</code>), focus trap + keyboard handler in <code>useLightbox</code>, IntersectionObserver callback ref in <code>useGrid</code>.</td>
+</tr>
+<tr>
+<td><code>apps/web</code></td>
+<td>Gemini 3.6 Flash</td>
+<td>Layout CSS styling, basic HTML structures.</td>
+<td>Integrated <code>ActivityLog</code> subscriber, wired <code>PhotoGridView</code> and <code>VideoReelView</code> mapping functions, verified zero-SDK-import rules in UI layer.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="skill-document-verification-testing" class="tsd-anchor-link">Skill Document Verification &amp; Testing<a href="#skill-document-verification-testing" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<p>Two <a href="http://SKILL.md">SKILL.md</a> documents were authored to guide AI coding assistants:</p>
+<ul>
+<li><a href="/D:/My%20Projects/nexus-media-sdk/skills/wiring-media-data/SKILL.md">skills/wiring-media-data/SKILL.md</a>: Teaches proper consumption of <code>@media-sdk/react</code>.</li>
+<li><a href="/D:/My%20Projects/nexus-media-sdk/skills/using-media-components/SKILL.md">skills/using-media-components/SKILL.md</a>: Teaches consumption of <code>@media-sdk/ui-react</code> prop-getters and BYO-styling rules.</li>
+</ul>
+<p><strong>Validation Methodology (A/B Test)</strong>:</p>
+<ol>
+<li><strong>Control Run (Without Skill)</strong>: Prompted a fresh AI agent to build a Pexels search grid component. The agent violated boundaries by importing <code>@media-sdk/core</code> directly, instantiating <code>createMediaClient</code> inside the component, and hardcoding inline styles.</li>
+<li><strong>Treatment Run (With Skill Loaded)</strong>: Prompted with the same instructions while <code>wiring-media-data</code> and <code>using-media-components</code> skills were active. The agent correctly imported exclusively from <code>@media-sdk/react</code>, mapped data to local <code>MediaItem</code> types, and used prop-getters with external Tailwind CSS classes.</li>
+</ol>
+<hr>
+<h2 id="project-links" class="tsd-anchor-link">Project Links<a href="#project-links" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2>
+<ul>
+<li><strong>GitHub Repository</strong>: <code>https://github.com/Priyank1311/nexus-media-sdk</code></li>
+<li><strong>Live Demo Web App</strong>: add the deployed Vercel URL here</li>
+<li><strong>Core SDK API Docs (TypeDoc)</strong>: add the deployed TypeDoc URL here</li>
+<li><strong>Headless UI Components Docs</strong>: add the deployed UI docs URL here</li>
+<li><strong>AI Agent Trajectory / Transcripts</strong>: add the chat log or transcript links here</li>
+</ul>
+</div></div>
+<div class="col-sidebar">
+<div class="page-menu">
+<div class="tsd-navigation settings">
+<details class="tsd-accordion"><summary class="tsd-accordion-summary"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="assets/icons.svg#icon-chevronDown"></use></svg>
+<h3>Settings</h3></summary>
+<div class="tsd-accordion-details">
+<div class="tsd-filter-visibility"><span class="settings-label">Member Visibility</span>
+<ul id="tsd-filter-options">
+<li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-protected" name="protected"/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect class="tsd-checkbox-background" width="30" height="30" x="1" y="1" rx="6" fill="none"></rect><path class="tsd-checkbox-checkmark" d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25" stroke="none" stroke-width="3.5" stroke-linejoin="round" fill="none"></path></svg><span>Protected</span></label></li>
+<li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-inherited" name="inherited" checked/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect class="tsd-checkbox-background" width="30" height="30" x="1" y="1" rx="6" fill="none"></rect><path class="tsd-checkbox-checkmark" d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25" stroke="none" stroke-width="3.5" stroke-linejoin="round" fill="none"></path></svg><span>Inherited</span></label></li>
+<li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-external" name="external"/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect class="tsd-checkbox-background" width="30" height="30" x="1" y="1" rx="6" fill="none"></rect><path class="tsd-checkbox-checkmark" d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25" stroke="none" stroke-width="3.5" stroke-linejoin="round" fill="none"></path></svg><span>External</span></label></li></ul></div>
+<div class="tsd-theme-toggle"><label class="settings-label" for="tsd-theme">Theme</label><select id="tsd-theme"><option value="os">OS</option><option value="light">Light</option><option value="dark">Dark</option></select></div></div></details></div>
+<details open class="tsd-accordion tsd-page-navigation"><summary class="tsd-accordion-summary"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="assets/icons.svg#icon-chevronDown"></use></svg>
+<h3>On This Page</h3></summary>
+<div class="tsd-accordion-details"><a href="#nexusmedia-headless-sdk-engine"><span>Nexus<wbr/>Media — <wbr/>Headless <wbr/>SDK <wbr/>Engine</span></a>
+<ul>
+<li><a href="#architecture-overview"><span>Architecture <wbr/>Overview</span></a></li>
+<li>
+<ul>
+<li><a href="#strict-architectural-boundaries"><span>Strict <wbr/>Architectural <wbr/>Boundaries</span></a></li></ul></li>
+<li><a href="#setup-local-development"><span>Setup &amp; <wbr/>Local <wbr/>Development</span></a></li>
+<li>
+<ul>
+<li><a href="#prerequisites"><span>Prerequisites</span></a></li>
+<li><a href="#installation"><span>Installation</span></a></li>
+<li><a href="#environment-setup"><span>Environment <wbr/>Setup</span></a></li>
+<li><a href="#running-packages-applications"><span>Running <wbr/>Packages &amp; <wbr/>Applications</span></a></li></ul></li>
+<li><a href="#what-was-cut-and-why-engineering-tradeoffs"><span>What <wbr/>Was <wbr/>Cut and <wbr/>Why (<wbr/>Engineering <wbr/>Tradeoffs)</span></a></li>
+<li><a href="#ai-tool-usage"><span>AI <wbr/>Tool <wbr/>Usage</span></a></li>
+<li>
+<ul>
+<li><a href="#generation-vs-review-breakdown"><span>Generation vs. <wbr/>Review <wbr/>Breakdown</span></a></li>
+<li><a href="#skill-document-verification-testing"><span>Skill <wbr/>Document <wbr/>Verification &amp; <wbr/>Testing</span></a></li></ul></li>
+<li><a href="#project-links"><span>Project <wbr/>Links</span></a></li></ul></div></details></div>
+<div class="site-menu">
+<nav class="tsd-navigation"><a href="modules.html">Headless Media SDK Ecosystem API Documentation</a>
+<ul class="tsd-small-nested-navigation" id="tsd-nav-container">
+<li>Loading...</li></ul></nav></div></div></div><footer>
+<p class="tsd-generator">Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p></footer>
+<div class="overlay"></div></body></html>

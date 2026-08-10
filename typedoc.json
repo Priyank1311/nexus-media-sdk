@@ -11,5 +11,6 @@
   "validation": {
     "notExported": true,
     "invalidLink": true
-  }
+  },
+  "tsconfig": "./tsconfig.docs.json"
 }

@@ -1,0 +1,23 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "lib": [
+      "ES2023",
+      "DOM"
+    ],
+    "jsx": "react-jsx",
+    "allowImportingTsExtensions": true
+  },
+  "include": [
+    "packages/media-core/src/**/*.ts",
+    "packages/media-core/src/**/*.tsx",
+    "packages/media-react/src/**/*.ts",
+    "packages/media-react/src/**/*.tsx",
+    "packages/media-native/src/**/*.ts",
+    "packages/media-native/src/**/*.tsx",
+    "packages/media-ui-react/src/**/*.ts",
+    "packages/media-ui-react/src/**/*.tsx",
+    "packages/media-ui-native/src/**/*.ts",
+    "packages/media-ui-native/src/**/*.tsx"
+  ]
+}
