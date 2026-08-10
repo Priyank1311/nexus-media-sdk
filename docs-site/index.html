@@ -69,9 +69,15 @@
 </code><button type="button">Copy</button></pre>
 
 <h3 id="running-packages-applications" class="tsd-anchor-link">Running Packages &amp; Applications<a href="#running-packages-applications" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h3>
-<pre><code class="bash"><span class="hl-0"># Start the web app dev server (apps/web)</span><br/><span class="hl-1">pnpm</span><span class="hl-2"> </span><span class="hl-3">dev</span><br/><br/><span class="hl-0"># Typecheck all workspace packages</span><br/><span class="hl-1">pnpm</span><span class="hl-2"> </span><span class="hl-3">typecheck</span><br/><br/><span class="hl-0"># Build static API documentation site via TypeDoc</span><br/><span class="hl-1">pnpm</span><span class="hl-2"> </span><span class="hl-3">docs</span>
+<pre><code class="bash"><span class="hl-0"># Start the web app dev server (apps/web)</span><br/><span class="hl-1">pnpm</span><span class="hl-2"> </span><span class="hl-3">dev</span><br/><br/><span class="hl-0"># Typecheck all workspace packages</span><br/><span class="hl-1">pnpm</span><span class="hl-2"> </span><span class="hl-3">typecheck</span><br/><br/><span class="hl-0"># Build static API documentation site via TypeDoc</span><br/><span class="hl-1">pnpm</span><span class="hl-2"> </span><span class="hl-3">docs:build</span>
 </code><button type="button">Copy</button></pre>
 
+<h3 id="api-documentation" class="tsd-anchor-link">API Documentation<a href="#api-documentation" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<p>Generate the SDK reference site with:</p>
+<pre><code class="bash"><span class="hl-1">pnpm</span><span class="hl-2"> </span><span class="hl-3">docs:build</span>
+</code><button type="button">Copy</button></pre>
+
+<p>This writes a static TypeDoc site to <code>docs-site</code>. You can publish that folder to any static host, or serve it locally with a simple file server after generating it.</p>
 <hr>
 <h2 id="what-was-cut-and-why-engineering-tradeoffs" class="tsd-anchor-link">What Was Cut and Why (Engineering Tradeoffs)<a href="#what-was-cut-and-why-engineering-tradeoffs" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2>
 <ol>
@@ -183,7 +189,8 @@
 <li><a href="#prerequisites"><span>Prerequisites</span></a></li>
 <li><a href="#installation"><span>Installation</span></a></li>
 <li><a href="#environment-setup"><span>Environment <wbr/>Setup</span></a></li>
-<li><a href="#running-packages-applications"><span>Running <wbr/>Packages &amp; <wbr/>Applications</span></a></li></ul></li>
+<li><a href="#running-packages-applications"><span>Running <wbr/>Packages &amp; <wbr/>Applications</span></a></li>
+<li><a href="#api-documentation"><span>API <wbr/>Documentation</span></a></li></ul></li>
 <li><a href="#what-was-cut-and-why-engineering-tradeoffs"><span>What <wbr/>Was <wbr/>Cut and <wbr/>Why (<wbr/>Engineering <wbr/>Tradeoffs)</span></a></li>
 <li><a href="#ai-tool-usage"><span>AI <wbr/>Tool <wbr/>Usage</span></a></li>
 <li>
