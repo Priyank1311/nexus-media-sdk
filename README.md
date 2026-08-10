@@ -142,7 +142,8 @@ Two SKILL.md documents were authored to guide AI coding assistants:
 ## Project Links
 
 - **GitHub Repository**: `https://github.com/Priyank1311/nexus-media-sdk`
-- **Live Demo Web App**: add the deployed Vercel URL here
-- **Core SDK API Docs (TypeDoc)**: add the deployed TypeDoc URL here
-- **Headless UI Components Docs**: add the deployed UI docs URL here
-- **AI Agent Trajectory / Transcripts**: add the chat log or transcript links here
+- **Live Demo Web App**: `https://nexus-media-sdk-web.vercel.app/`
+- **Core SDK API Docs (TypeDoc)**: `https://priyank1311.github.io/nexus-media-sdk/`
+- **Headless UI Components Docs**: `https://priyank1311.github.io/nexus-media-sdk/`
+- **AI Agent Trajectory / Transcripts**: `https://claude.ai/share/08e89dca-3caa-403e-89e0-8b662d246b1a`
+- **Skills.md**: `https://github.com/Priyank1311/nexus-media-sdk/tree/main/skills`
