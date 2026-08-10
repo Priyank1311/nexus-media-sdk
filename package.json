@@ -11,7 +11,9 @@
     "build": "pnpm --filter web build",
     "vercel-build": "node scripts/vercel-build.js",
     "typecheck": "pnpm -r typecheck",
-    "docs": "typedoc"
+    "docs": "typedoc",
+    "docs:build": "typedoc",
+    "docs:clean": "powershell -NoProfile -Command \"Remove-Item -Recurse -Force docs-site -ErrorAction SilentlyContinue\""
   },
   "devDependencies": {
     "typedoc": "^0.28.0",

@@ -8,3 +8,5 @@ dist
 
 .vercel
 .env*
+
+docs-site

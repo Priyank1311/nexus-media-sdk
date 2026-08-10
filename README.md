@@ -85,8 +85,18 @@ pnpm dev
 pnpm typecheck
 
 # Build static API documentation site via TypeDoc
-pnpm docs
+pnpm docs:build
 ```
+
+### API Documentation
+
+Generate the SDK reference site with:
+
+```bash
+pnpm docs:build
+```
+
+This writes a static TypeDoc site to `docs-site`. You can publish that folder to any static host, or serve it locally with a simple file server after generating it.
 
 ---
 
